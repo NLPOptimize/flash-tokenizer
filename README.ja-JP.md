@@ -15,7 +15,10 @@ The world's fastest CPU tokenizer library!
 [FlashTokenizer](https://pypi.org/project/flash-tokenizer/) は、LLM推論で使用されるBertTokenizerをC++で実装した**高性能トークナイザー**です。[FlashAttention](https://github.com/Dao-AILab/flash-attention) や [FlashInfer](https://github.com/flashinfer-ai/flashinfer) と同様に、あらゆるトークナイザーの中で最高レベルの速度と精度を誇り、transformersの`BertTokenizerFast`よりも**10倍高速**です。
 
 
-### [▶️ パフォーマンスベンチマークデモ動画](https://www.youtube.com/watch?v=a_sTiAXeSE0)
+## パフォーマンスベンチマークデモ動画
+[![Video Label](http://img.youtube.com/vi/a_sTiAXeSE0/0.jpg)](https://youtu.be/a_sTiAXeSE0)
+
+
 
 
 > [!NOTE]  
