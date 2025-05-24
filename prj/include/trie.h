@@ -48,13 +48,14 @@
 class ACTrie;
 
 class TrieNode {
-    std::array<int, 256> children{};
-    std::array<bool, 256> explicitChild{};
-    int vocab_index = -1;
-    int fail = 0;
+    std::array<int, 256> children;
+    std::array<bool, 256> explicitChild;
+    int vocab_index;
+    int word_len;
+    int fail;
 
 public:
-    TrieNode() {
+    TrieNode() : children(), explicitChild(), vocab_index(-1), word_len(0), fail(0) {
         children.fill(-1);
         explicitChild.fill(false);
     }
@@ -64,58 +65,80 @@ public:
 
 class ACTrie {
     std::vector<TrieNode> pool;
-    std::vector<int> dfa; // DFA(Deterministic Finite Automaton)
-    std::vector<bool> isExplicit;
+    std::vector<int> dfa; // deterministic next state: state*256 + c
+    std::vector<bool> isExplicit; // whether the transition was explicit
 
 public:
     ACTrie() {
         pool.emplace_back();
     }
 
-    void insert(const std::string &word, const int index) {
-        int current = 0;
-        for (const unsigned char c: word) {
-            if (pool[current].children[c] == -1) {
-                pool[current].children[c] = static_cast<int>(pool.size());
-                pool[current].explicitChild[c] = true;
+    void insert_bytes(const std::vector<unsigned char> &seq, int index) {
+        int node = 0;
+        for (unsigned char b: seq) {
+            if (pool[node].children[b] == -1) {
+                pool[node].children[b] = (int) pool.size();
+                pool[node].explicitChild[b] = true;
                 pool.emplace_back();
             }
-            current = pool[current].children[c];
+            node = pool[node].children[b];
         }
-        pool[current].vocab_index = index;
+        pool[node].vocab_index = index;
+        pool[node].word_len = (int) seq.size();
     }
 
+    // Insert a word, storing its vocab index and length
+    void insert(const std::string &word, int index) {
+        int node = 0;
+        for (unsigned char c: word) {
+            if (pool[node].children[c] == -1) {
+                pool[node].children[c] = pool.size();
+                pool[node].explicitChild[c] = true;
+                pool.emplace_back();
+            }
+            node = pool[node].children[c];
+        }
+        pool[node].vocab_index = index;
+        pool[node].word_len = word.size();
+    }
+
+    // Build failure links and DFA table
     void build() {
         std::queue<int> q;
+        // Initialize root
         for (int c = 0; c < 256; ++c) {
-            if (pool[0].children[c] != -1) {
-                pool[pool[0].children[c]].fail = 0;
-                q.push(pool[0].children[c]);
+            int child = pool[0].children[c];
+            if (child != -1) {
+                pool[child].fail = 0;
+                q.push(child);
             } else {
                 pool[0].children[c] = 0;
-                pool[0].explicitChild[c] = false;
             }
         }
+        // BFS for failure links
         while (!q.empty()) {
-            const int cur = q.front();
+            int cur = q.front();
             q.pop();
-            const int f = pool[cur].fail;
+            int f = pool[cur].fail;
             for (int c = 0; c < 256; ++c) {
-                if (pool[cur].children[c] != -1 && pool[cur].explicitChild[c]) {
-                    int child = pool[cur].children[c];
-                    pool[child].fail = pool[f].children[c];
-                    q.push(child);
+                int nxt = pool[cur].children[c];
+                if (nxt != -1 && pool[cur].explicitChild[c]) {
+                    pool[nxt].fail = pool[f].children[c];
+                    q.push(nxt);
                 } else {
                     pool[cur].children[c] = pool[f].children[c];
                 }
             }
         }
-        dfa.resize(pool.size() * 256, -1);
-        isExplicit.resize(pool.size() * 256, false);
-        for (size_t state = 0; state < pool.size(); state++) {
-            for (int c = 0; c < 256; c++) {
-                dfa[state * 256 + c] = pool[state].children[c];
-                isExplicit[state * 256 + c] = pool[state].explicitChild[c];
+        // Build DFA and explicit flags
+        int states = pool.size();
+        dfa.resize(states * 256);
+        isExplicit.resize(states * 256);
+        for (int s = 0; s < states; ++s) {
+            for (int c = 0; c < 256; ++c) {
+                int idx = s * 256 + c;
+                dfa[idx] = pool[s].children[c];
+                isExplicit[idx] = pool[s].explicitChild[c];
             }
         }
     }
@@ -139,9 +162,19 @@ public:
         }
         return {best_length, best_index};
     }
+
+    // Advance state by character
+    int step(int state, unsigned char c) const {
+        return dfa[state * 256 + c];
+    }
+
+    // Get failure link of a state
+    int fail_link(int state) const {
+        return pool[state].fail;
+    }
+
+    // Get vocab index stored at this node (or -1)
 };
 
-
 using Trie = ACTrie;
-
 #endif

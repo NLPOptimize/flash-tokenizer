@@ -4,5 +4,5 @@ from .bert_tokenizer_huggingface import HuggingFaceBertTokenizerFast
 from .bert_tokenizer_tensorflow import TensorflowBertTokenizerFast
 from .bert_tokenizer_blingfire import BlingfireBertTokenizer
 from .bert_tokenizer_flash import FlashBertTokenizer
-from .bert_tokenizer_rust import RustBertTokenizer
+# from .bert_tokenizer_rust import RustBertTokenizer
 from .config import get_config, TokenizerConfig

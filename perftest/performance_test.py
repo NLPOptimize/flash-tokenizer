@@ -22,6 +22,10 @@ class Config:
     bert_base_chinese = "bert-base-chinese"
     kcbert_base = "kcbert-base"
     llmlingua_2_bert_base_multilingual_cased_meetingbank = "llmlingua-2-bert-base-multilingual-cased-meetingbank"
+    bert_base_japanese = "bert-base-japanese"
+    bert_base_swedish_cased = "bert-base-swedish-cased"
+    chinese_macbert_large = "chinese-macbert-large"
+    splade = "splade"
 
 
 class Data:
@@ -31,18 +35,27 @@ class Data:
     texts_multilingual_all = "texts_multilingual.all.parquet"
 
 
-def load_parquet(file_path: str, config: str, ratio: Union[float, None] = None, count: Union[int, None] = None):
+def load_parquet(file_path: str, config: str, ratio: Union[float, None] = None, count: Union[int, None] = None, config_path=None):
     df = pd.read_parquet(file_path,
-                         columns=["text", config],
+                         #columns=["text", config],
+                         columns=["text"],
                          engine="pyarrow")
+
     texts = [row.decode() for row in df["text"]]
-    gts = [row.tolist() for row in df[config]]
     if ratio is not None and 0.0 < ratio < 1.0:
         size = int(len(texts) * ratio)
     elif count is not None and count < len(texts):
         size = count
     else:
         size = len(texts)
+    if config in df.keys():
+        gts = [row.tolist() for row in df[config]]
+    else:
+        tokenizerX = OriginalBertTokenizer(config_path)
+        gts = []
+        for text in tqdm(texts[:size], desc="Generate GT"):
+            gts.append(tokenizerX(text, padding="longest"))
+
     return texts[:size], gts[:size]
 
 
@@ -64,9 +77,9 @@ def single_encode_performance_test(tokenizer: Any, texts: List[str], gts: List[L
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='BertTokenizer performance test', add_help=False)
 
-    parser.add_argument('-c', '--config', type=str, default=Config.bert_base_cased, required=True)
-    parser.add_argument('-d', '--dataset', type=str, default=Data.texts_en_all, required=True)
-    parser.add_argument('-s', '--size', type=int, default=100000, required=False)
+    parser.add_argument('-c', '--config', type=str, default=Config.bert_base_japanese, required=False)
+    parser.add_argument('-d', '--dataset', type=str, default=Data.texts_multilingual_all, required=False)
+    parser.add_argument('-s', '--size', type=int, default=1_000_000, required=False)
     args = parser.parse_args()
 
     # config_path = "../dataset/config/" + Config.bert_base_multilingual_cased
@@ -109,7 +122,7 @@ if __name__ == '__main__':
     tokenizers.append(tokenizer5)
 
     logging.info("Loading data...")
-    texts, gts = load_parquet(dataset_path, os.path.basename(config_path), count=size)
+    texts, gts = load_parquet(dataset_path, os.path.basename(config_path), count=size, config_path=config_path)
 
     logging.info("Performance comparisons are conducted using the following tokenizers:")
     for tokenizer in tokenizers:

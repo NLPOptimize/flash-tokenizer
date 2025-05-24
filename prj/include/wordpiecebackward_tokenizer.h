@@ -50,7 +50,7 @@ public:
         : WordpieceTokenizer(vocab_, unk) {
     }
 
-    int tokenizer_ids(const std::string &token, const int max_length, std::vector<int> &input_ids) const override {
+    int tokenizer_ids(const std::string &token, const int max_length, std::vector<int> &input_ids) const  {
         const size_t token_size = token.size();
         if (token_size > static_cast<size_t>(max_length) && input_ids.size() < max_length) {
             input_ids.emplace_back(this->UNK_NUM);

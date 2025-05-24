@@ -17,3 +17,4 @@ class HuggingFaceBertTokenizerFast:
     @property
     def name(self):
         return "BertTokenizerFast(Huggingface)"
+

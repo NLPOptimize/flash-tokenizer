@@ -41,6 +41,55 @@
 #include<vector>
 #include<string>
 #include<sstream>
+#include <string>
+
+#if defined(_WIN32)
+#  include <intrin.h>
+#elif defined(__APPLE__)
+#  include <sys/types.h>
+#  include <sys/sysctl.h>
+#  include <unistd.h>
+#elif defined(__linux__)
+#  include <fstream>
+#  include <sstream>
+#endif
+
+static std::string get_cpu_name() {
+#if defined(_WIN32)
+    int info[4] = {0};
+    __cpuid(info, 0x80000000);
+    unsigned int maxExt = info[0];
+    if (maxExt >= 0x80000004) {
+        char brand[49] = {};
+        __cpuid(reinterpret_cast<int*>(info), 0x80000002);
+        std::memcpy(brand +  0, info, sizeof(info));
+        __cpuid(reinterpret_cast<int*>(info), 0x80000003);
+        std::memcpy(brand + 16, info, sizeof(info));
+        __cpuid(reinterpret_cast<int*>(info), 0x80000004);
+        std::memcpy(brand + 32, info, sizeof(info));
+        return std::string(brand);
+    }
+
+#elif defined(__APPLE__)
+    char brand[256];
+    size_t size = sizeof(brand);
+    if (sysctlbyname("machdep.cpu.brand_string", brand, &size, nullptr, 0) == 0)
+        return std::string(brand, size - 1);
+
+#elif defined(__linux__)
+    std::ifstream cpuinfo("/proc/cpuinfo");
+    std::string line;
+    while (std::getline(cpuinfo, line)) {
+        if (line.rfind("model name", 0) == 0) {
+            auto pos = line.find(':');
+            if (pos != std::string::npos)
+                return line.substr(pos + 2);
+        }
+    }
+#endif
+
+    return "Unknown CPU";
+}
 
 
 static std::string GetOS() {

@@ -50,3 +50,7 @@ perftest/test.py
 perftest/.*/
 docs/blackpaper/
 extract.py
+dataset/BPE
+dataset/txt
+perftest/performance_test_splade.py
+*.h5

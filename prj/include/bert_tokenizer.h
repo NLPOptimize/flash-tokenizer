@@ -106,6 +106,7 @@ public:
         if (accent_mapping.empty()) {
             accent_mapping = initializeCharMap();
         }
+
     }
 
     virtual ~FlashBertTokenizer() = default;

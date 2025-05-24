@@ -82,5 +82,15 @@
 #define FORCE_INLINE static
 #endif
 
+#if defined(_MSC_VER)
+#include<memory.h>
+#define ALLOCA _alloca
+#else
+#include<alloca.h>
+#define ALLOCA alloca
+#endif
+
+#define _4MB_ 4194304 // 1,048,576 int
+#define _1MB_ 1048576
 
 #endif

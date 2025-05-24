@@ -33,7 +33,7 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
             -fstrict-aliasing -finline-functions
             -march=native -mtune=native)
 elseif (MSVC)
-    set(COMPILE_OPTIONS /O2 /W1 /GL /Ot /Ob3 /fp:fast /arch:AVX2 /Zc:__cplusplus /EHsc- /GR-)
+    set(COMPILE_OPTIONS /O2 /W1 /GL /Ot /Ob3 /fp:fast /arch:AVX2 /Zc:__cplusplus /EHsc- /GR- /link /STACK:4194304)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif ()
 
