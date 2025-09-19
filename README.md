@@ -8,6 +8,22 @@
 The world's fastest CPU tokenizer library!
 </h1>
 
+FlashTokenizer has been selected as one of Libhunt's [Top 11 C++ NLP Projects](https://www.libhunt.com/l/cpp/topic/nlp).
+
+<details>
+  <summary>2025 Top 11 C++ NLP Projects</summary>
+
+![Top11C++NLP-Projects](https://github.com/user-attachments/assets/3fd507d9-3f7b-4d78-badf-fc28ffb00889)
+  
+</details>
+
+
+[![PyPI Downloads](https://static.pepy.tech/personalized-badge/flash-tokenizer?period=total&units=ABBREVIATION&left_color=BLUE&right_color=BLACK&left_text=pypi+downloads)](https://pepy.tech/projects/flash-tokenizer)
+
+* https://pepy.tech/projects/flash-tokenizer
+
+* * *
+
 ### 🇨🇳 [简体中文](./README.zh-CN.md) 🇰🇷[한국어](./README.ko-KR.md) 🇯🇵[日本語](./README.ja-JP.md)
 
 
