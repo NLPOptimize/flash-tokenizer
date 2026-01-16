@@ -3,11 +3,12 @@ from bert_tokenizer import FlashBertTokenizer
 from tqdm import tqdm
 import os
 from metrics import jaccard_sim
+from pathlib import Path
 
 config_path = "../dataset/config/" + Config.bert_base_multilingual_uncased
 dataset_path = "../dataset/data/" + Data.texts_ko_all
 
-texts, gts = load_parquet(dataset_path, os.path.basename(config_path))
+texts, gts = load_parquet(Path(dataset_path), Path(os.path.basename(config_path)))
 
 tokenizer = FlashBertTokenizer(config_path)
 correct = 0

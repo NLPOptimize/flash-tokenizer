@@ -117,8 +117,8 @@ if __name__ == '__main__':
         tokenizers.append(tokenizer4)
     tokenizer5 = FlashBertTokenizer(config_path)
 
-    tokenizer6 = RustBertTokenizer(config_path)
-    tokenizers.append(tokenizer6)
+    #tokenizer6 = RustBertTokenizer(config_path)
+    #tokenizers.append(tokenizer6)
     tokenizers.append(tokenizer5)
 
     logging.info("Loading data...")
@@ -129,7 +129,7 @@ if __name__ == '__main__':
         logging.info(f'\t{tokenizer.name}')
     logging.info('-' * 30)
 
-    print(f'{mark} {os.path.basename(config_path)}, texts: {len(texts)}({os.path.basename(dataset_path).split('.')[0]})')
+    print(f'{mark} {os.path.basename(config_path)}, texts: {len(texts)}({os.path.basename(dataset_path).split(".")[0]})')
     tables = []
     for tokenizer in tokenizers:
         r = single_encode_performance_test(tokenizer, texts, gts, bar_color=color)

@@ -103,7 +103,8 @@ conda activate python39 && python -m build --wheel && ^
 conda activate python310 && python -m build --wheel && ^
 conda activate python311 && python -m build --wheel && ^
 conda activate python312 && python -m build --wheel && ^
-conda activate python313 && python -m build --wheel
+conda activate python313 && python -m build --wheel && ^
+conda activate python314 && python -m build --wheel
 ```
 
 ## ✅ macOS(arm64)
@@ -113,30 +114,42 @@ conda activate python313 && python -m build --wheel
 </p><br>
 
 
-#### 01. Creating a Python environment from Python 3.8 to 3.13
+#### 01. Creating a Python environment from Python 3.8 to 3.14
 ```bash
-conda create -n python38 python=3.8 -y &&\
+
 conda create -n python39 python=3.9 -y &&\
 conda create -n python310 python=3.10 -y &&\
 conda create -n python311 python=3.11 -y &&\
 conda create -n python312 python=3.12 -y &&\
-conda create -n python313 python=3.13 -y
+conda create -n python313 python=3.13 -y &&\
+conda create -n python314 python=3.14 -y
 
-conda activate python38 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location &&\
-conda activate python39 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location &&\
-conda activate python310 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location &&\
-conda activate python311 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location &&\
-conda activate python312 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location &&\
-conda activate python313 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location
+conda activate python39 && conda install build twine pybind11 numpy setuptools wheel -y &&\
+conda activate python310 && conda install build twine pybind11 numpy setuptools wheel -y &&\
+conda activate python311 && conda install build twine pybind11 numpy setuptools wheel -y &&\
+conda activate python312 && pip install build twine pybind11 numpy setuptools wheel -y &&\
+conda activate python313 && conda install build twine pybind11 numpy setuptools wheel -y &&\
+conda activate python314 && conda install build twine pybind11 numpy setuptools wheel -y
 ```
+
+```bash
+uv venv .venv39 && source .venv39/bin/activate && uv pip install build twine pybind11 numpy setuptools wheel &&
+uv venv .venv310 && source .venv310/bin/activate && uv pip install build twine pybind11 numpy setuptools wheel  &&
+uv venv .venv311 && source .venv311/bin/activate && uv pip install build twine pybind11 numpy setuptools wheel &&
+uv venv .venv312 && source .venv312/bin/activate && uv pip install build twine pybind11 numpy setuptools wheel &&
+uv venv .venv313 && source .venv313/bin/activate && uv pip install build twine pybind11 numpy setuptools wheel  &&
+uv venv .venv314 && source .venv314/bin/activate && uv pip install build twine pybind11 numpy setuptools wheel 
+```
+
 
 #### 02.
 ```bash
-conda activate python38 && python -m build --wheel && \
+
 conda activate python39 && python -m build --wheel && \
 conda activate python310 && python -m build --wheel && \
 conda activate python311 && python -m build --wheel && \
 conda activate python312 && python -m build  --wheel && \
-conda activate python313 && python -m build
+conda activate python313 && python -m build --wheel && \
+conda activate python314 && python -m build --wheel
 ```
 

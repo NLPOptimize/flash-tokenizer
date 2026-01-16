@@ -1,7 +1,8 @@
 #ifndef IDECIDEDTOCONVERTALLTHECHARACTERSINCHARMAPUT8
 #define IDECIDEDTOCONVERTALLTHECHARACTERSINCHARMAPUT8
 
-#include <robin_hood.h>
+//#include <robin_hood.h>
+#include <unordered_dense.h>
 #include <string>
 #include "defines.h"
 
@@ -25,10 +26,14 @@ FORCE_INLINE std::string codePointToUTF8(const int codePoint) {
     return result;
 }
 
-SELECT_ANY inline robin_hood::unordered_flat_map<int, std::string> accent_mapping;
+//SELECT_ANY inline robin_hood::unordered_flat_map<int, std::string> accent_mapping;
+SELECT_ANY inline ankerl::unordered_dense::segmented_map<int, std::string> accent_mapping;
 
-static robin_hood::unordered_flat_map<int, std::string> initializeCharMap() {
-    robin_hood::unordered_flat_map<int, std::string> charMap;
+static ankerl::unordered_dense::segmented_map<int, std::string> initializeCharMap() {
+    ankerl::unordered_dense::segmented_map<int, std::string> charMap;
+
+    //static robin_hood::unordered_flat_map<int, std::string> initializeCharMap() {
+    //    robin_hood::unordered_flat_map<int, std::string> charMap;
     charMap[0x00c0] = codePointToUTF8(0x0061);
     charMap[0x00c1] = codePointToUTF8(0x0061);
     charMap[0x00c2] = codePointToUTF8(0x0061);

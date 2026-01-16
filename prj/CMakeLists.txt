@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-set(PROJECT_VERSION_STR 1.2.0)
+set(PROJECT_VERSION_STR 1.3.0)
 
 project(flash_tokenizer VERSION ${PROJECT_VERSION_STR})
 set(CMAKE_CXX_STANDARD 17)
@@ -13,6 +13,9 @@ option(BUILD_PYTHON_MODULE "Build the Python module" ON)
 find_package(OpenMP)
 
 set(SRC_FILES src/bert_tokenizer.cpp)
+
+add_definitions(-DUSE_ROBIN_HOOD_LIB)
+add_definitions(-DUSE_ANKERL_LIB)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     set(COMPILE_OPTIONS -Ofast -funroll-loops -floop-nest-optimize

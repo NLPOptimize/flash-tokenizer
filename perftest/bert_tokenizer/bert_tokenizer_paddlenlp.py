@@ -1,11 +1,11 @@
-from paddlenlp.transformers.bert.tokenizer_fast import BertTokenizerFast
+from paddlenlp.transformers.bert.tokenizer import BertTokenizer
 from .config import get_config
 
 
 class PaddleNLPBertTokenizerFast:
     def __init__(self, config_dir: str):
         config = get_config(config_dir)
-        self.tokenizer = BertTokenizerFast(vocab_file=config.vocab_file, do_lower_case=config.do_lower_case, tokenize_chinese_chars=config.tokenize_chinese_chars)
+        self.tokenizer = BertTokenizer(vocab_file=config.vocab_file, do_lower_case=config.do_lower_case, tokenize_chinese_chars=config.tokenize_chinese_chars)
         self.model_max_length = config.model_max_length
 
     def __call__(self, text, max_length=-1, padding="max_length"):

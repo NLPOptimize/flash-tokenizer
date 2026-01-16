@@ -536,3 +536,11 @@ FlashTokenizer is inspired by [FlashAttention](https://github.com/Dao-AILab/flas
 * https://github.com/martinus/robin-hood-hashing
 * https://arxiv.org/abs/2012.15524
 * https://github.com/google/highway
+
+
+* * *
+
+Blingfire2: https://github.com/lfoppiano/Blingfire/
+https://pypi.org/project/blingfire2/
+
+https://github.com/microsoft/BlingFire/blob/master/nuget/lib/runtimes/osx-arm64/native/libblingfiretokdll.dylib
