@@ -38,7 +38,6 @@
 #define LVCZSHPWCVMPWCPYHRKYHEJBSZRTVAXCMPUQFCFWFSTTETZCMVYCJYDVVSSNZS
 #include "defines.h"
 #include <codecvt>
-#include <robin_hood.h>
 #include <array>
 #include <memory_resource>
 #include"charmap.h"

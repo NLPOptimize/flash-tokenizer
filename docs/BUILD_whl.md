@@ -80,14 +80,12 @@ del .\miniconda.exe
 
 #### 02. Configure the Python environment for each version and install the necessary libraries.
 ```bash
-conda create -n python38 python=3.8 -y && ^
 conda create -n python39 python=3.9 -y && ^
 conda create -n python310 python=3.10 -y && ^
 conda create -n python311 python=3.11 -y && ^
 conda create -n python312 python=3.12 -y && ^
-conda create -n python313 python=3.13 -y
+conda create -n python313 python=3.13 -y 
 
-conda activate python38 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location transformers && ^
 conda activate python39 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location transformers && ^
 conda activate python310 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location transformers && ^
 conda activate python311 && pip install build twine pybind11 numpy setuptools wheel --no-warn-script-location transformers && ^
@@ -98,13 +96,11 @@ conda activate python313 && pip install build twine pybind11 numpy setuptools wh
 #### 03. Create a whl file for each version
 
 ```bash
-conda activate python38 && python -m build --wheel && ^
 conda activate python39 && python -m build --wheel && ^
 conda activate python310 && python -m build --wheel && ^
 conda activate python311 && python -m build --wheel && ^
 conda activate python312 && python -m build --wheel && ^
-conda activate python313 && python -m build --wheel && ^
-conda activate python314 && python -m build --wheel
+conda activate python313 && python -m build --wheel
 ```
 
 ## ✅ macOS(arm64)

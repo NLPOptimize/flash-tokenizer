@@ -14,7 +14,7 @@ find_package(OpenMP)
 
 set(SRC_FILES src/bert_tokenizer.cpp)
 
-add_definitions(-DUSE_ROBIN_HOOD_LIB)
+#add_definitions(-DUSE_ROBIN_HOOD_LIB)
 add_definitions(-DUSE_ANKERL_LIB)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")

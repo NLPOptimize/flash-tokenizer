@@ -11,8 +11,11 @@
 #include <vector>
 #include<Python.h>
 using namespace std;
-#ifdef _MSC_VER
+
+#if defined(_MSC_VER) && !defined(__clang__)
 static const std::string base_dir = "../";
+#elif defined(__clang__)
+static const std::string base_dir = "";
 #else
 static const std::string base_dir = "";
 #endif
@@ -75,6 +78,7 @@ public:
 
     void pycall(const std::string &parquet_path, const std::string &config) {
         Py_Initialize();
+        PyRun_SimpleString("import os;os.environ[\"KMP_DUPLICATE_LIB_OK\"] = \"TRUE\"");
         PyRun_SimpleString("import sys; sys.path.append('.')");
         PyObject *pName = PyUnicode_DecodeFSDefault("data_loader");
         PyObject *pModule = PyImport_Import(pName);
@@ -201,11 +205,11 @@ int main() {
     std::ios::sync_with_stdio(false);
 
     cout << cpp_env() << endl;
-    perf_test(false);
+    perf_test(true);
 
     //BPE
 
-
+    cout << KVLIB << endl;
     //cout << g_1 << "\t" << g_2 << "\t" << g_3 << "\t" << g_4 << endl;
     return 0;
 }

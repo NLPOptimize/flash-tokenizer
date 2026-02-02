@@ -6,12 +6,11 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <unordered_dense.h>
+#include <kv.h>
 #include "json.hpp"
 #include <codecvt>
 #include <locale>
 
-#include "robin_hood.h"
 
 using json = nlohmann::json;
 using Pair = std::pair<std::string, std::string>;
@@ -50,16 +49,13 @@ public:
     }
 
 private:
-    //robin_hood::unordered_flat_map<std::string, int> vocab_;
-    //robin_hood::unordered_flat_map<Pair, int, pair_hash> bpe_ranks_;
-    ankerl::unordered_dense::segmented_map<std::string, int> vocab_;
-    ankerl::unordered_dense::segmented_map<Pair,int,pair_hash> bpe_ranks_;
+    KVMAP<std::string, int> vocab_;
+    KVMAP<Pair, int, pair_hash> bpe_ranks_;
 
-    //static robin_hood::unordered_flat_map<Pair, int, pair_hash>
-    static ankerl::unordered_dense::segmented_map<Pair,int,pair_hash>
+
+    static KVMAP<Pair, int, pair_hash>
     loadMerges(const std::string &merges_path) {
-        //robin_hood::unordered_flat_map<Pair, int, pair_hash> ranks;
-        ankerl::unordered_dense::segmented_map<Pair,int,pair_hash> ranks;
+        KVMAP<Pair, int, pair_hash> ranks;
         std::ifstream mf(merges_path);
         std::string line;
         int rank = 0;
@@ -74,11 +70,9 @@ private:
         return ranks;
     }
 
-    //static robin_hood::unordered_flat_set<Pair, pair_hash>
-    static ankerl::unordered_dense::segmented_set<Pair,pair_hash>
+    static KVSET<Pair, pair_hash>
     getPairs(const std::vector<std::string> &word) {
-        //robin_hood::unordered_flat_set<Pair, pair_hash> pairs;
-        ankerl::unordered_dense::segmented_set<Pair,pair_hash> pairs;
+        KVSET<Pair, pair_hash> pairs;
         for (size_t i = 0; i + 1 < word.size(); ++i) {
             pairs.insert({word[i], word[i + 1]});
         }

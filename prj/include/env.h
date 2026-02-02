@@ -45,6 +45,7 @@
 
 #if defined(_WIN32)
 #  include <intrin.h>
+#include <cstdlib>
 #elif defined(__APPLE__)
 #  include <sys/types.h>
 #  include <sys/sysctl.h>
@@ -62,11 +63,12 @@ static std::string get_cpu_name() {
     if (maxExt >= 0x80000004) {
         char brand[49] = {};
         __cpuid(reinterpret_cast<int*>(info), 0x80000002);
-        std::memcpy(brand +  0, info, sizeof(info));
+
+        memcpy(brand +  0, info, sizeof(info));
         __cpuid(reinterpret_cast<int*>(info), 0x80000003);
-        std::memcpy(brand + 16, info, sizeof(info));
+        memcpy(brand + 16, info, sizeof(info));
         __cpuid(reinterpret_cast<int*>(info), 0x80000004);
-        std::memcpy(brand + 32, info, sizeof(info));
+        memcpy(brand + 32, info, sizeof(info));
         return std::string(brand);
     }
 

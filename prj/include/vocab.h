@@ -40,8 +40,7 @@
 #include <fstream>
 #include <iostream>
 #include "defines.h"
-//#include <robin_hood.h>
-#include <unordered_dense.h>
+#include <kv.h>
 
 struct VTHasher {
     size_t operator()(const std::string &key) const {
@@ -61,8 +60,8 @@ public:
     std::vector<std::string> tokens{};
     //robin_hood::unordered_flat_map<std::string, int, VTHasher> token_to_index{};
     //robin_hood::unordered_flat_map<int, std::string> index_to_token{};
-    ankerl::unordered_dense::segmented_map<std::string,int,VTHasher> token_to_index{};
-    ankerl::unordered_dense::segmented_map<int,std::string> index_to_token{};
+    KVMAP<std::string,int,VTHasher> token_to_index{};
+    KVMAP<int,std::string> index_to_token{};
 
     explicit Vocab(const std::string &filename) {
         std::ifstream ifs(filename);

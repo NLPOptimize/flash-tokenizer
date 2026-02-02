@@ -6,9 +6,17 @@ project(flash_tokenizer VERSION ${PROJECT_VERSION_STR})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    set(CMAKE_C_COMPILER_LAUNCHER   ${CCACHE_PROGRAM})
+    set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_PROGRAM})
+endif()
 
 option(BUILD_EXECUTABLE "Build the executable" ON)
 
+#add_definitions(-DUSE_ROBIN_HOOD_LIB)
+add_definitions(-DUSE_ANKERL_LIB)
+#add_definitions(-DUSE_ABSEIL_LIB)
 
 find_package(OpenMP)
 
@@ -27,20 +35,33 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
             -fstrict-overflow -fomit-frame-pointer -fipa-cp-clone)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_options(-Wno-deprecated-declarations)
-    add_definitions(-DDO_FORCE_INLINE)
+    #add_definitions(-DDO_FORCE_INLINE)
     set(COMPILE_OPTIONS -O3 -flto -funroll-loops -ffast-math
             -fomit-frame-pointer -fvectorize -fslp-vectorize -fno-finite-math-only
             -fstrict-aliasing -finline-functions
             -march=native -mtune=native)
 elseif (MSVC)
-    set(COMPILE_OPTIONS /O2 /W1 /GL /Ot /Ob3 /fp:fast /arch:AVX2 /Zc:__cplusplus /EHsc- /GR- /link /STACK:4194304)
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+    set(COMPILE_OPTIONS /O2 /W1 /GL /Ot /Ob2 /fp:fast /arch:AVX2 /Zc:__cplusplus /link /STACK:4194304)
+    #set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 endif ()
 
 
 if (BUILD_EXECUTABLE)
     add_executable(flash_tokenizer main.cpp ${SRC_FILES})
     target_include_directories(flash_tokenizer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/prj/include)
+
+    #############################################################
+#    target_include_directories(flash_tokenizer PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/prj/3rdparty_msvc/include)
+#    file(GLOB _3rdparty_libs
+#            "${CMAKE_CURRENT_SOURCE_DIR}/prj/3rdparty_msvc/lib/*.a"
+#            "${CMAKE_CURRENT_SOURCE_DIR}/prj/3rdparty_msvc/lib/*.lib"
+#    )
+#    if (_3rdparty_libs)
+#        target_link_libraries(flash_tokenizer PRIVATE ${_3rdparty_libs})
+#        target_link_libraries(flash_tokenizer PRIVATE ${_3rdparty_libs})
+#    endif ()
+    #############################################################
+
 
 
     target_include_directories(flash_tokenizer PRIVATE ${Python3_INCLUDE_DIRS})

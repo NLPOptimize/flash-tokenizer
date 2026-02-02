@@ -85,6 +85,9 @@
 #if defined(_MSC_VER)
 #include<memory.h>
 #define ALLOCA _alloca
+#elif defined(__GNUC__) || defined(__clang__)
+#include<stdlib.h>
+#define ALLOCA alloca
 #else
 #include<alloca.h>
 #define ALLOCA alloca
